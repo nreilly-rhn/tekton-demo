@@ -17,9 +17,9 @@ spec:
   giteaAdminPassword: ""
   giteaAdminPasswordLength: 16
   giteaCreateUsers: false
-#  giteaGenerateUserFormat: gitea
-#  giteaUserNumber: 1
-#  giteaUserPasswordLength: 16
+  giteaGenerateUserFormat: gitea
+  giteaUserNumber: 1
+  giteaUserPasswordLength: 16
   giteaMigrateRepositories: true
   giteaRepositoriesList:
   - repo: https://github.com/siamaksade/spring-petclinic
