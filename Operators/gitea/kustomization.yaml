@@ -7,4 +7,5 @@ resources:
   - ./init/catalogsource.yaml
   - ./init/operatorgroup.yaml
   - ./init/subscription.yaml
+  - ./instances/namespace.yaml
   - ./instances/gitea_demo.yaml
