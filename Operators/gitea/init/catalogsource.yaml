@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  name: redhat-rhpds-gitea
+  namespace: gitea-operator
+spec:
+  displayName: Red Hat Demo Platform (Gitea)
+  image: quay.io/rhpds/gitea-catalog:latest
+  publisher: Red Hat Demo Platform
+  sourceType: grpc

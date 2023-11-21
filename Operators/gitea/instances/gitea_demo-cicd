@@ -1,0 +1,32 @@
+---
+apiVersion: pfe.rhpds.com/v1
+kind: Gitea
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: gitea
+spec:
+  giteaImageTag: latest
+  giteaVolumeSize: 4Gi
+  giteaVolumeStorageClass: gp3-csi
+  giteaSsl: true
+  postgresqlVolumeSize: 4Gi
+  postgresqlVolumeStorageClass: gp3-csi
+  giteaAdminUser: gitea
+  giteaAdminPassword: ""
+  giteaAdminPasswordLength: 16
+  giteaCreateUsers: true
+  giteaGenerateUserFormat: lab-user
+  giteaUserNumber: 1
+  giteaUserPasswordLength: 16
+  giteaMigrateRepositories: true
+  giteaRepositoriesList:
+  - repo: https://github.com/siamaksade/spring-petclinic
+    name: spring-petclinic
+    private: false
+  - repo: https://github.com/siamaksade/spring-petclinic-config
+    name: spring-petclinic-config
+    private: false
+  - repo: https://github.com/siamaksade/spring-petclinic-gatling
+    name: spring-petclinic-gatling
+    private: false
