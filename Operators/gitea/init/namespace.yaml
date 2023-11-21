@@ -5,6 +5,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
   labels:
     kubernetes.io/metadata.name: gitea-operator
+    argocd.argoproj.io/managed-by: openshift-gitops
   name: gitea-operator
 spec:
   finalizers:
