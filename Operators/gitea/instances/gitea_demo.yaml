@@ -13,13 +13,13 @@ spec:
   giteaSsl: true
   postgresqlVolumeSize: 4Gi
   postgresqlVolumeStorageClass: gp3-csi
-  giteaAdminUser: gitea
+  giteaAdminUser: gitea-mgr
   giteaAdminPassword: ""
   giteaAdminPasswordLength: 16
-  giteaCreateUsers: true
-  giteaGenerateUserFormat: lab-user-%d
-  giteaUserNumber: 2
-  giteaUserPasswordLength: 16
+  giteaCreateUsers: false
+#  giteaGenerateUserFormat: gitea
+#  giteaUserNumber: 1
+#  giteaUserPasswordLength: 16
   giteaMigrateRepositories: true
   giteaRepositoriesList:
   - repo: https://github.com/siamaksade/spring-petclinic
