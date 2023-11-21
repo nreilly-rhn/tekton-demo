@@ -10,7 +10,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: ArgoCD/applications
+    path: ArgoCD/Operators
     repoURL: >-
       https://github.com/nreilly-rhn/tekton-demo.git
     targetRevision: main
