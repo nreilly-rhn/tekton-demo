@@ -1,0 +1,22 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitea-operator
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: gitea-operator
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Operators/gitea/init
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
