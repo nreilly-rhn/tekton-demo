@@ -4,3 +4,4 @@ metadata:
   name: kustomization-file
 resources:
   - ./operators.yaml
+  - ./dicd-demo.yaml
