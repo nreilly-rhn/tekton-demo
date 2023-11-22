@@ -3,6 +3,7 @@ kind: Kustomization
 metadata:
   name: kustomization-file
 resources:
+  - ./namespace.yaml
   - ./catalogsource.yaml
   - ./operatorgroup.yaml
   - ./subscription.yaml
