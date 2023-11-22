@@ -3,4 +3,4 @@ kind: Kustomization
 metadata:
   name: kustomization-file
 resources:
-  - ./gitea-operator.yaml
+  - ./projects.yaml

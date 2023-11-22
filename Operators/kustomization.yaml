@@ -3,5 +3,4 @@ kind: Kustomization
 metadata:
   name: kustomization-file
 resources:
-  - ./gitea
-  - ./openshift-pipelines/init
+  - ./applications.yaml
