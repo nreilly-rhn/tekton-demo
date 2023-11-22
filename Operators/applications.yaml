@@ -20,3 +20,25 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+#apiVersion: argoproj.io/v1alpha1
+#kind: Application
+#metadata:
+#  name: openshift-pipelines
+#  namespace: openshift-gitops
+#spec:
+#  destination:
+#    namespace: openshift-pipelines
+#    server: 'https://kubernetes.default.svc'
+#  project: default
+#  source:
+#    path: Operators/openshift-pipelines
+#    repoURL: >-
+#      https://github.com/nreilly-rhn/tekton-demo.git
+#    targetRevision: main
+#  syncPolicy:
+#    automated:
+#      prune: false
+#      selfHeal: true
+#    syncOptions:
+#      - CreateNamespace=true
