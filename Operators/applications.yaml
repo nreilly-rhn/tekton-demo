@@ -28,11 +28,11 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: openshift-pipelines/init
+    namespace: openshift-pipelines
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: Operators/openshift-pipelines
+    path: Operators/openshift-pipelines/init
     repoURL: >-
       https://github.com/nreilly-rhn/tekton-demo.git
     targetRevision: main
