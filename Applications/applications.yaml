@@ -1,0 +1,44 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitea
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: demo-cicd
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Applications/gitea
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nexus
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: demo-cicd
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Applications/nexus
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
