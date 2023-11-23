@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  labels:
+    kubernetes.io/metadata.name: demo-cicd
+    argocd.argoproj.io/managed-by: openshift-gitops
+  name: demo-cicd
+spec:
+  finalizers:
+  - kubernetes
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
