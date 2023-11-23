@@ -5,7 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
   name: gitea
-  namespace: gitea
+  namespace: demo-cicd
 spec:
   giteaImageTag: latest
   giteaVolumeSize: 4Gi

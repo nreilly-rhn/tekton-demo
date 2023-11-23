@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/name: nexus
     app.kubernetes.io/part-of: nexus
   name: nexus
+  namespace: demo-cicd
 spec:
   replicas: 1
   selector:

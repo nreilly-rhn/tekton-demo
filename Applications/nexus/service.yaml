@@ -4,6 +4,7 @@ metadata:
   labels:
     app: nexus
   name: nexus
+  namespace: demo-cicd
 spec:
   ports:
   - name: 8081-tcp

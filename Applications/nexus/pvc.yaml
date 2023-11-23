@@ -4,6 +4,7 @@ metadata:
   labels:
     app: nexus
   name: nexus-pv
+  namespace: demo-cicd
 spec:
   accessModes:
   - ReadWriteOnce
