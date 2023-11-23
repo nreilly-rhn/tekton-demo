@@ -4,4 +4,4 @@ metadata:
   name: kustomization-file
 resources:
   - ./operators
-  - ./cicd-demo
+  - ./cicd
