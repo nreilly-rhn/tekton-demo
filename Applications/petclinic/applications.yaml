@@ -32,3 +32,25 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: petclinic-pipelines
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Applications/petclinic/pipelines
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
