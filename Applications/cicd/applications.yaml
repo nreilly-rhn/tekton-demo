@@ -22,7 +22,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: Applications/gitea
+    path: Applications/cicd/gitea
     repoURL: >-
       https://github.com/nreilly-rhn/tekton-demo.git
     targetRevision: main
@@ -44,7 +44,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: Applications/nexus
+    path: Applications/cicd/nexus
     repoURL: >-
       https://github.com/nreilly-rhn/tekton-demo.git
     targetRevision: main
@@ -66,7 +66,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: Applications/reports
+    path: Applications/cicd/reports
     repoURL: >-
       https://github.com/nreilly-rhn/tekton-demo.git
     targetRevision: main
@@ -88,7 +88,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: Applications/sonarqube
+    path: Applications/cicd/sonarqube
     repoURL: >-
       https://github.com/nreilly-rhn/tekton-demo.git
     targetRevision: main
