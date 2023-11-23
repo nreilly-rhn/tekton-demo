@@ -4,7 +4,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
   labels:
-    kubernetes.io/metadata.name: cicd
+    kubernetes.io/metadata.name: dev
     argocd.argoproj.io/managed-by: openshift-gitops
   name: dev
 spec:
