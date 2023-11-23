@@ -14,7 +14,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: petclinic
+  name: petclinic-tasks
   namespace: openshift-gitops
 spec:
   destination:
