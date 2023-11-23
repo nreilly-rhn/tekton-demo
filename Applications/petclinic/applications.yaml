@@ -19,7 +19,7 @@ metadata:
   labels:
     kubernetes.io/metadata.name: stage
     argocd.argoproj.io/managed-by: openshift-gitops
-  name: stage
+  name: cicd
 spec:
   finalizers:
   - kubernetes
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: petclinic-dev-workspace
-  namespace: dev
+  namespace: cicd
 spec:
   resources:
     requests:
