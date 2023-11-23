@@ -24,6 +24,34 @@ spec:
   finalizers:
   - kubernetes
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: petclinic-dev-workspace
+  namespace: dev
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: petclinic-stage-workspace
+  namespace: stage
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain 
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
