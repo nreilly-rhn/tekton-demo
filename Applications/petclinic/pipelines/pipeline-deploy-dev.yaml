@@ -7,7 +7,7 @@ spec:
     - name: APP_SOURCE_GIT
       type: string
       description: The application git repository
-      default: https://gitea.cicd.svc.cluster.local:3000/gitea1/spring-petclinic
+      default: https://gitea.cicd.svc:3000/gitea1/spring-petclinic
     - name: APP_SOURCE_REVISION
       type: string
       description: The application git revision
@@ -15,11 +15,11 @@ spec:
     - name: APP_CONFIG_GIT
       type: string
       description: The application configuration git repository
-      default: https://gitea.cicd.svc.cluster.local:3000/gitea1//spring-petclinic-config
+      default: https://gitea.cicd.svc:3000/gitea1//spring-petclinic-config
     - name: APP_TESTS_GIT
       type: string
       description: The application test cases git repository
-      default: https://gitea.cicd.svc.cluster.local:3000/gitea1//spring-petclinic-gatling
+      default: https://gitea.cicd.svc:3000/gitea1//spring-petclinic-gatling
     - name: APP_IMAGE
       type: string
       default: image-registry.openshift-image-registry.svc:5000/dev/spring-petclinic
@@ -115,8 +115,8 @@ spec:
       - -f 
       - spring-petclinic
       - -DskipTests=true
-      - -DaltDeploymentRepository=nexus::default::https://nexus.cicd.svc.cluster.local:8081/repository/maven-releases/
-      - -DaltSnapshotDeploymentRepository=nexus::default::https://nexus.cicd.svc.cluster.local:8081/repository/maven-snapshots/
+      - -DaltDeploymentRepository=nexus::default::https://nexus.cicd.svc:8081/repository/maven-releases/
+      - -DaltSnapshotDeploymentRepository=nexus::default::https://nexus.cicd.svc:8081/repository/maven-snapshots/
   - name: build-image
     taskRef:
       name: s2i-java
@@ -127,7 +127,7 @@ spec:
       - name: TLSVERIFY
         value: "false"
       - name: MAVEN_MIRROR_URL
-        value: https://nexus.cicd.svc.cluster.local:8081/repository/maven-public/
+        value: https://nexus.cicd.svc:8081/repository/maven-public/
       - name: PATH_CONTEXT
         value: spring-petclinic/target
       - name: IMAGE
@@ -209,7 +209,7 @@ spec:
       - deploy-dev
     params:
       - name: APP_URL
-        value: "http://spring-petclinic.demo-dev.svc.cluster.local:8080"
+        value: "http://spring-petclinic.demo-dev.svc:8080"
     workspaces:
     - name: simulations
       workspace: workspace

@@ -11,6 +11,19 @@ spec:
   finalizers:
   - kubernetes
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  labels:
+    kubernetes.io/metadata.name: stage
+    argocd.argoproj.io/managed-by: openshift-gitops
+  name: stage
+spec:
+  finalizers:
+  - kubernetes
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -18,7 +31,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: dev
+    namespace: cicd
     server: 'https://kubernetes.default.svc'
   project: default
   source:
@@ -40,7 +53,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: dev
+    namespace: cicd
     server: 'https://kubernetes.default.svc'
   project: default
   source:
