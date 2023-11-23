@@ -8,7 +8,7 @@ metadata:
 spec:
   tls:
     termination: edge
-    insecureEdgeTerminationPolicy: redirect
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: 8081-tcp
   to:
