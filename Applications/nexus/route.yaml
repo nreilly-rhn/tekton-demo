@@ -6,6 +6,9 @@ metadata:
   name: nexus
   namespace: demo-cicd
 spec:
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: redirect
   port:
     targetPort: 8081-tcp
   to:
