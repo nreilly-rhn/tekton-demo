@@ -24,58 +24,27 @@ spec:
   finalizers:
   - kubernetes
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: petclinic-dev-workspace
-  namespace: cicd
+  name: petclinic-config
+  namespace: openshift-gitops
 spec:
-  resources:
-    requests:
-      storage: 5Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: petclinic-stage-workspace
-  namespace: cicd
-spec:
-  resources:
-    requests:
-      storage: 5Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain 
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: maven-settings
-data:
-  settings.xml: |
-    <?xml version="1.0" encoding="UTF-8"?>
-    <settings>
-      <servers>
-        <server>
-          <id>nexus</id>
-          <username>admin</username>
-          <password>admin123</password>
-        </server>
-      </servers>
-      <mirrors>
-        <mirror>
-          <id>nexus</id>
-          <name>nexus</name>
-          <url>http://nexus.cicd.svc:8081/repository/maven-public/</url>
-          <mirrorOf>*</mirrorOf>
-        </mirror>
-      </mirrors>
-    </settings>
+  destination:
+    namespace: cicd
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Applications/petclinic/config
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
