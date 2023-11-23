@@ -3,4 +3,4 @@ kind: Kustomization
 metadata:
   name: kustomization-file
 resources:
-  - ./cicd-demo.yaml
+  - ./cicd.yaml

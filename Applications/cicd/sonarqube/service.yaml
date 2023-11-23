@@ -4,7 +4,7 @@ metadata:
   labels:
     app: sonarqube
   name: sonarqube
-  namespace: demo-cicd
+  namespace: cicd
 spec:
   ports:
   - name: 9000-tcp

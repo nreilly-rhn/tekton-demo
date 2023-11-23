@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonarqube
-  namespace: demo-cicd
+  namespace: cicd
   labels:
     app: sonarqube
     app.kubernetes.io/component: sonarqube

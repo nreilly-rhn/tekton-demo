@@ -2,9 +2,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app: nexus
-  name: nexus-pv
-  namespace: demo-cicd
+    app: reports-repo
+  name: reports-repo-pv
+  namespace: cicd
 spec:
   accessModes:
   - ReadWriteOnce

@@ -4,9 +4,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
   labels:
-    kubernetes.io/metadata.name: demo-cicd
+    kubernetes.io/metadata.name: cicd
     argocd.argoproj.io/managed-by: openshift-gitops
-  name: demo-cicd
+  name: cicd
 spec:
   finalizers:
   - kubernetes
@@ -18,7 +18,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: demo-cicd
+    namespace: cicd
     server: 'https://kubernetes.default.svc'
   project: default
   source:
@@ -40,7 +40,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: demo-cicd
+    namespace: cicd
     server: 'https://kubernetes.default.svc'
   project: default
   source:
@@ -62,7 +62,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: demo-cicd
+    namespace: cicd
     server: 'https://kubernetes.default.svc'
   project: default
   source:
@@ -84,7 +84,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: demo-cicd
+    namespace: cicd
     server: 'https://kubernetes.default.svc'
   project: default
   source:
