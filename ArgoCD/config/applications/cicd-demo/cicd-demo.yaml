@@ -2,11 +2,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: operators
+  name: cicd-demo
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: openshift-operators
+    namespace: cicd-demo
     server: 'https://kubernetes.default.svc'
   project: default
   source:
