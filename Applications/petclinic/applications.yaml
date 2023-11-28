@@ -89,3 +89,47 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: petclinic-pipelineruns
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: cicd
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Applications/petclinic/pipelineruns
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: petclinic-triggers
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: cicd
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: Applications/petclinic/triggers
+    repoURL: >-
+      https://github.com/nreilly-rhn/tekton-demo.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
