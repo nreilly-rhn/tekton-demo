@@ -17,7 +17,7 @@ spec:
   giteaAdminPassword: ""
   giteaAdminPasswordLength: 16
   giteaCreateUsers: true
-  giteaGenerateUserFormat: cicd-demo
+  giteaGenerateUserFormat: cicd-demo%d
   giteaUserNumber: 1
   giteaUserPasswordLength: 16
   giteaMigrateRepositories: true
