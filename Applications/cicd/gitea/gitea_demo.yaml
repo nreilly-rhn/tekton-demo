@@ -7,7 +7,7 @@ metadata:
   name: gitea
   namespace: cicd
 spec:
-  giteaImageTag: v2.0.3
+  giteaImageTag: v2.0.2
   giteaVolumeSize: 4Gi
   giteaVolumeStorageClass: gp3-csi
   giteaSsl: true
