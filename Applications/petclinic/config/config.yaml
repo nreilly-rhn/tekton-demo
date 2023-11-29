@@ -41,15 +41,15 @@ rules:
       - list
       - watch
     apiGroups:
-      - gitea.pfe.rhpds.com
+      - pfe.rhpds.com
     resources:
-      - 'gitea'
+      - gitea
   - verbs:
       - get
       - list
       - watch
     apiGroups:
-      - 'route.openshift.io'
+      - route.openshift.io
     resources:
       - routes
   - verbs:
@@ -73,7 +73,3 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: gitea-init-role
-
-#Error from server (Forbidden): gitea.pfe.rhpds.com "gitea" is forbidden: User "system:serviceaccount:cicd:gitea-init" cannot get resource "gitea" in API group "pfe.rhpds.com" in the namespace "cicd": RBAC: clusterrole.rbac.authorization.k8s.io "dedicated-admins" not found
-#Error from server (Forbidden): routes.route.openshift.io "webhook" is forbidden: User "system:serviceaccount:cicd:gitea-init" cannot get resource "routes" in API group "route.openshift.io" in the namespace "cicd": RBAC: clusterrole.rbac.authorization.k8s.io "dedicated-admins" not found
-#Error from server (Forbidden): services "gitea" is forbidden: User "system:serviceaccount:cicd:gitea-init" cannot get resource "services" in API group "" in the namespace "cicd": RBAC: clusterrole.rbac.authorization.k8s.io "dedicated-admins" not found
