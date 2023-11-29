@@ -31,6 +31,9 @@ metadata:
     app.kubernetes.io/part-of: Triggers
     eventlistener: webhook
 spec:
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: http-listener
   to:

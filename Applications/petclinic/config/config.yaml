@@ -23,3 +23,22 @@ data:
         </mirror>
       </mirrors>
     </settings>
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: gitea-init
+  namespace: cicd
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gitea-init-dedicated-admins
+  namespace: cicd
+subjects:
+  - kind: ServiceAccount
+    name: gitea-init
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: dedicated-admins
