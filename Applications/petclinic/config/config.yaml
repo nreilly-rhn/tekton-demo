@@ -77,7 +77,7 @@ roleRef:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: init-gogs-
+  Name: init-gogs-job
   namespace: cicd
 spec:
   template:
