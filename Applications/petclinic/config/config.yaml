@@ -95,7 +95,7 @@ spec:
             import requests 
             gitea_user = "demo-user"
             gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
-            webhookURL = "http://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
+            webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
             gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
 
             # configure webhook on spring-petclinic
