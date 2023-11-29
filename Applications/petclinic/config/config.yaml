@@ -30,6 +30,21 @@ metadata:
   name: gitea-init
   namespace: cicd
 ---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gitea-init-role
+  namespace: cicd
+rules:
+  - verbs:
+    - list
+    - get
+    - watch
+apiGroups:
+  - ''
+resources:
+  - ''
+---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -40,5 +55,5 @@ subjects:
     name: gitea-init
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: dedicated-admins
+  kind: Role
+  name: gitea-init-role
