@@ -21,7 +21,9 @@ spec:
               fieldPath: metadata.namespace
     steps:
       - name: init-gogs
-        image: quay.io/siamaksade/python-oc
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        serviceAccount: gitea-init
+        serviceAccountName: gitea-init
         script: |
           #!/usr/bin/env python3
           import os
