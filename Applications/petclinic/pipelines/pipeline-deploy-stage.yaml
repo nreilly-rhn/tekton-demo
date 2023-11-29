@@ -21,11 +21,11 @@ spec:
   - name: APP_CONFIG_GIT
     type: string
     description: The application configuration git repository
-    default: https://github.com/siamaksade/spring-petclinic-config
+    default: http://gitea.cicd.svc:3000/demo-user/spring-petclinic-config
   - name: APP_TESTS_GIT
     type: string
     description: The application test cases git repository
-    default: https://github.com/siamaksade/spring-petclinic-gatling
+    default: http://gitea.cicd.svc:3000/demo-user/spring-petclinic-gatling
   - name: APP_IMAGE_NAME
     type: string
     default: image-registry.openshift-image-registry.svc:5000/demo-dev/spring-petclinic
