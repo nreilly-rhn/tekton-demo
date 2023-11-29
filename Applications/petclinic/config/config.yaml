@@ -37,13 +37,29 @@ metadata:
   namespace: cicd
 rules:
   - verbs:
-    - list
-    - get
-    - watch
-apiGroups:
-  - 'gitea.pfe.rhpds.com'
-resources:
-  - 'gitea'
+      - get
+      - list
+      - watch
+    apiGroups:
+      - gitea.pfe.rhpds.com
+    resources:
+      - 'gitea'
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - 'route.openshift.io'
+    resources:
+      - routes
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - ''
+    resources:
+      - services
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
