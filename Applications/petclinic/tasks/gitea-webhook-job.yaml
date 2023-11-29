@@ -47,4 +47,4 @@ spec:
               print(resp.content)
             else:
               print("Configured webhook: " + webhookURL)
-      restartPolicy: Never
+      restartPolicy: OnFailure
