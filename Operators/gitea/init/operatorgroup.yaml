@@ -3,7 +3,6 @@ kind: OperatorGroup
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    olm.providedAPIs: Gitea.v1.pfe.rhpds.com
   name: gitea-operator
   namespace: gitea-operator
 spec:
