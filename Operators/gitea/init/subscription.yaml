@@ -9,7 +9,7 @@ metadata:
   namespace: gitea-operator
 spec:
   channel: stable
-  installPlanApproval: Manual
+  installPlanApproval: Automatic
   name: gitea-operator
   source: redhat-rhpds-gitea
   sourceNamespace: gitea-operator
