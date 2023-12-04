@@ -25,7 +25,7 @@ spec:
             # configure webhook on spring-petclinic
             data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
             
-            #petclinic_result = None
+            petclinic_result = None
             while petclinic_result is not 200 or result is not 201:
               try:
                 nonlocal petclinic_result
@@ -38,7 +38,7 @@ spec:
               finally:
                 print(str(petclinic_result) + "Configured webhook: " + webhookURL)
             
-            #petclinic_config_result = None
+            petclinic_config_result = None
             while petclinic_config_result is not 200 or result is not 201:
               try:
                 nonlocal petclinic_config_result
