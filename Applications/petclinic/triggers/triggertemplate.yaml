@@ -2,6 +2,8 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
   name: petclinic-trigger-template
 spec:
   params:

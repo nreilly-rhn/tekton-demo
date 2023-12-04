@@ -13,4 +13,3 @@ spec:
   name: gitea-operator
   source: redhat-rhpds-gitea
   sourceNamespace: gitea-operator
-#  startingCSV: gitea-operator.v2.0.2

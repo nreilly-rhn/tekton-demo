@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "3"
     tekton.dev/pipelines.minVersion: 0.12.1
     tekton.dev/tags: build-tool
   name: maven

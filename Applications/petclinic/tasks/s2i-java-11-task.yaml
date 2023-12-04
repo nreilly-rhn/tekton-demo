@@ -3,6 +3,7 @@ kind: Task
 metadata:
   name: s2i-java-11
   annotations:
+    argocd.argoproj.io/sync-wave: "3"
     tekton.dev/displayName: s2i java 11
     tekton.dev/pipelines.minVersion: 0.11.3
     tekton.dev/tags: 's2i, java, workspace'

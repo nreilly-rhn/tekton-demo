@@ -2,6 +2,8 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
   name: gogs-triggerbinding
 spec:
   params:
