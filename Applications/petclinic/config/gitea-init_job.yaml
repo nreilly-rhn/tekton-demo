@@ -15,6 +15,7 @@ spec:
           - python3
           - -c
           - |
+            result = ""
             def petclinic_webhook():
               global result
               if result != '200' or result != 201:
