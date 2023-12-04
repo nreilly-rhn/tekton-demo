@@ -26,9 +26,9 @@ spec:
             data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
             
             petclinic_result = ""
-            global petclinic_result
             while petclinic_result is not 200 or result is not 201:
               try:
+              global petclinic_result
                 headers = {'Content-Type': 'application/json'}
                 resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic/hooks",
                   headers = headers,
