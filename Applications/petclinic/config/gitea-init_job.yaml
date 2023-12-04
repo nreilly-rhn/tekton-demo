@@ -33,7 +33,7 @@ spec:
                   headers = headers,
                   auth = (gitea_user, gitea_pwd),
                   data = data_webhook)
-                global petclinic_result = resp.status_code
+                nonlocal petclinic_result = resp.status_code
               finally:
                 print(str(petclinic_result) + "Configured webhook: " + webhookURL)
             
@@ -45,7 +45,7 @@ spec:
                   headers = headers,
                   auth = (gitea_user, gitea_pwd),
                   data = data_webhook)
-                global petclinic_config_result = resp.status_code
+                nonlocal petclinic_config_result = resp.status_code
               finally:
                 print(str(petclinic_config_result) + "Configured webhook: " + webhookURL)
       restartPolicy: OnFailure
