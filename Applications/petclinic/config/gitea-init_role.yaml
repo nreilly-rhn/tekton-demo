@@ -31,9 +31,7 @@ rules:
     resources:
       - services
   - verbs:
-      - get
-      - list
-      - watch
+      - '*'
     apiGroups:
       - operators.coreos.com
     resources:
