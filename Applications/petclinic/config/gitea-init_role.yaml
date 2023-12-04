@@ -37,4 +37,4 @@ rules:
     apiGroups:
       - operators.coreos.com
     resources:
-      - operators
+      - '*'
