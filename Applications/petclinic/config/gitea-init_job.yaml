@@ -28,7 +28,7 @@ spec:
             global petclinic_result
             while petclinic_result is not 200 or result is not 201:
               try:
-                #nonlocal petclinic_result
+                nonlocal petclinic_result
                 headers = {'Content-Type': 'application/json'}
                 resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic/hooks",
                   headers = headers,
@@ -41,7 +41,7 @@ spec:
             global petclinic_config_result
             while petclinic_config_result is not 200 or result is not 201:
               try:
-                #nonlocal petclinic_config_result
+                nonlocal petclinic_config_result
                 headers = {'Content-Type': 'application/json'}
                 resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic-config/hooks",
                   headers = headers,
