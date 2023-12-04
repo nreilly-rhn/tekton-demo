@@ -35,7 +35,7 @@ spec:
                   data = data_webhook)
                 petclinic_result = resp.status_code
               finally:
-                print(petclinic_result + "Configured webhook: " + webhookURL)
+                print(str(petclinic_result) + "Configured webhook: " + webhookURL)
             
             petclinic_config_result = None
             while petclinic_config_result is not 200 or result is not 201:
@@ -47,5 +47,5 @@ spec:
                   data = data_webhook)
                 petclinic_config_result = resp.status_code
               finally:
-                print(petclinic_config_result + "Configured webhook: " + webhookURL)
+                print(str(petclinic_config_result) + "Configured webhook: " + webhookURL)
       restartPolicy: OnFailure
