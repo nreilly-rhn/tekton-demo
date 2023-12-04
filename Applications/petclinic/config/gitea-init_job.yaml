@@ -38,17 +38,17 @@ spec:
                 finally:
                   print("Configured webhook: " + webhookURL)
 
-            result = ""
+            config_result = ""
             def petclinic_config_webhook():
-              global result
-              if result != '200' or result != 201:
+              global config_result
+              if config_result != '200' or config_result != 201:
                 try:
                   headers = {'Content-Type': 'application/json'}
                   resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic-config/hooks",
                             headers = headers,
                                       auth = (gitea_user, gitea_pwd),
                                       data = data_webhook)
-                  result = resp.status_code
+                  config_result = resp.status_code
                 finally:
                   print("Configured webhook: " + webhookURL)
 
