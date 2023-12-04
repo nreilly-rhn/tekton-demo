@@ -24,7 +24,7 @@ spec:
                                     auth = (gitea_user, gitea_pwd),
                                     data = data_webhook)
                 result = resp.status_code
-                print(result + "Configured webhook: " + webhookURL)
+              print("Configured webhook: " + webhookURL)
 #            import os
 #            import requests
 #            
