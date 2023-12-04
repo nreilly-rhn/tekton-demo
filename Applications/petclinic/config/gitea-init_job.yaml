@@ -15,6 +15,15 @@ spec:
           - python3
           - -c
           - |
+            import os
+            import requests
+            
+            gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
+            gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
+            webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
+            gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+            # configure webhook on spring-petclinic
+            data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
             result = ""
             def petclinic_webhook():
               global result
