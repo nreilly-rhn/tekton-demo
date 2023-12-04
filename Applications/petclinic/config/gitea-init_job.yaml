@@ -25,10 +25,10 @@ spec:
             # configure webhook on spring-petclinic
             data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
             
-            petclinic_result = None
+            global petclinic_result
             while petclinic_result is not 200 or result is not 201:
               try:
-                nonlocal petclinic_result
+                #nonlocal petclinic_result
                 headers = {'Content-Type': 'application/json'}
                 resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic/hooks",
                   headers = headers,
@@ -38,10 +38,10 @@ spec:
               finally:
                 print(str(petclinic_result) + "Configured webhook: " + webhookURL)
             
-            petclinic_config_result = None
+            global petclinic_config_result
             while petclinic_config_result is not 200 or result is not 201:
               try:
-                nonlocal petclinic_config_result
+                #nonlocal petclinic_config_result
                 headers = {'Content-Type': 'application/json'}
                 resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic-config/hooks",
                   headers = headers,
