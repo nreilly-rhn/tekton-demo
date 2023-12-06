@@ -140,6 +140,6 @@ spec:
           EOF
           for REPO in ${REPOS[@]}; do
             timeout 300 bash -c "$CONFIGURE_WEBHOOK" $0 $REPO $CHECK_INTERVAL
-          echo "Webhook configured for "$REPO"
+          echo "Webhook configured for $REPO"
           done
       restartPolicy: OnFailure
