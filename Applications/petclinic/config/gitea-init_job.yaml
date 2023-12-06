@@ -88,7 +88,7 @@ spec:
           done
           EOF
           for OPERATOR in ${OPERATORS[@]}; do
-            timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $INSTANCE $CHECK_INTERVAL
+            timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $CHECK_INTERVAL
           done
           read -r -d '' IN_CMD <<EOF
           check_instance() {
