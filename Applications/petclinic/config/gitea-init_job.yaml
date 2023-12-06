@@ -45,126 +45,100 @@ spec:
       - name: init-gogs
         image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
         command:
-          - /bin/sh
-          - -ce
-          - |
-            OPERATORS=("gitea-operator.gitea-operator")
-            INSTANCES=("gitea")
-            REPOS=("spring-petclinic" "spring-petclinic-config")
-            CHECK_INTERVAL=1
-
-            read -r -d '' OP_CMD <<EOF
-            check_csv() {
-              oc get operators.operators.coreos.com \$operator -o jsonpath='{.status.components.refs[?(@.kind=="ClusterServiceVersion")].conditions[0].reason}'
-            }
-
-            check_instance() {
-              oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
-              echo \$?
-            }
-
-            write_operator_status() {
-              echo "Waiting for operator \$operator, status: \$csv_status"
-            }
-
-            write_instance_status() {
-              echo "Waiting for operator \$instance, status: \$instance_status"
-            }
-
-            operator=\${1}
-
-            if [[ -z \$operator ]]; then
-              echo "No operator name supplied, aborting"
-              exit 2
-            fi
-
-            instance=\${2}
-
-            if [[ -z \$instance ]]; then
-              echo "No instance name supplied, aborting"
-              exit 2
-            fi
-
-            check_interval=\${3:-10}
-
+        - /bin/bash
+        - '-c'
+        - |
+          #!/bin/bash
+          set -uo pipefail
+          OPERATORS=("gitea-operator.gitea-operator")
+          INSTANCES=("gitea")
+          REPOS=("spring-petclinic" "spring-petclinic-config")
+          CHECK_INTERVAL=1
+          read -r -d '' OP_CMD <<EOF
+          check_csv() {
+            oc get operators.operators.coreos.com \$operator -o jsonpath='{.status.components.refs[?(@.kind=="ClusterServiceVersion")].conditions[0].reason}'
+          }
+          check_instance() {
+            oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
+            echo \$?
+          }
+          write_operator_status() {
+            echo "Waiting for operator \$operator, status: \$csv_status"
+          }
+          write_instance_status() {
+            echo "Waiting for operator \$instance, status: \$instance_status"
+          }
+          operator=\${1}
+          if [[ -z \$operator ]]; then
+            echo "No operator name supplied, aborting"
+            exit 2
+          fi
+          instance=\${2}
+          if [[ -z \$instance ]]; then
+            echo "No instance name supplied, aborting"
+            exit 2
+          fi
+          check_interval=\${3:-10}
+          csv_status="\$(check_csv)"
+          write_operator_status
+          while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
+            sleep \$check_interval
             csv_status="\$(check_csv)"
             write_operator_status
-            while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
-              sleep \$check_interval
-              csv_status="\$(check_csv)"
-              write_operator_status
-            done
-
-            EOF
-
-            for OPERATOR in ${OPERATORS[@]}; do
-              timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $INSTANCE $CHECK_INTERVAL
-            done
-
-            read -r -d '' IN_CMD <<EOF
-            check_instance() {
-              oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
-              echo \$?
-            }
-
-            write_instance_status() {
-              echo "Waiting for operator \$instance, status: \$instance_status"
-            }
-
-            instance=\${1}
-
-            if [[ -z \$instance ]]; then
-              echo "No instance name supplied, aborting"
-              exit 2
-            fi
-
-            check_interval=\${2:-10}
-
+          done
+          EOF
+          for OPERATOR in ${OPERATORS[@]}; do
+            timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $INSTANCE $CHECK_INTERVAL
+          done
+          read -r -d '' IN_CMD <<EOF
+          check_instance() {
+            oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
+            echo \$?
+          }
+          write_instance_status() {
+            echo "Waiting for operator \$instance, status: \$instance_status"
+          }
+          instance=\${1}
+          if [[ -z \$instance ]]; then
+            echo "No instance name supplied, aborting"
+            exit 2
+          fi
+          check_interval=\${2:-10}
+          instance_status="\$(check_instance)"
+          write_instance_status
+          while [[ "\$instance_status" != 0 ]]; do
+            sleep \$check_interval
             instance_status="\$(check_instance)"
             write_instance_status
-            while [[ "\$instance_status" != 0 ]]; do
-              sleep \$check_interval
-              instance_status="\$(check_instance)"
-              write_instance_status
-            done
-
-            EOF
-
-            for INSTANCE in ${INSTANCES[@]}; do
-              timeout 300 bash -c "$IN_CMD" $0 $INSTANCE $CHECK_INTERVAL
-            done
-
-            REPOS=("spring-petclinic" "spring-petclinic-config")
-
-            read -r -d '' CONFIGURE_WEBHOOK <<EOF
-            gitea_user=$(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}')
-            gitea_pwd=$(oc get gitea gitea -ojsonpath='{.status.userPassword}')
-            webhook_route=$(oc get route webhook -ojsonpath='{.spec.host}')
-            gitea_service=$(oc get svc gitea -ojsonpath='{.spec.clusterIP}')
-
-            configure_webhook() {
-              curl -XPOST --data '{"type": "gogs", "config": { "url": "https://${webhook_route}", "content_type": "json"}, "events": ["push"], "active": true}' --header "Content-Type: application/json" --user \${gitea_user}:\${gitea_pwd} --write-out %{http_code} --silent http://\${gitea_service}:3000/api/v1/repos/\${gitea_user}/\${repo}/hooks
-            }
-
-            repo=\${1}
-
-            write_webhook_status() {
-              echo "Waiting for Webhook for \$repo, status: \$configure_webhook"
-            }
-
-            check_interval=\${2:-10}
-
+          done
+          EOF
+          for INSTANCE in ${INSTANCES[@]}; do
+            timeout 300 bash -c "$IN_CMD" $0 $INSTANCE $CHECK_INTERVAL
+          done
+          REPOS=("spring-petclinic" "spring-petclinic-config")
+          read -r -d '' CONFIGURE_WEBHOOK <<EOF
+          gitea_user=$(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}')
+          gitea_pwd=$(oc get gitea gitea -ojsonpath='{.status.userPassword}')
+          webhook_route=$(oc get route webhook -ojsonpath='{.spec.host}')
+          gitea_service=$(oc get svc gitea -ojsonpath='{.spec.clusterIP}')
+          configure_webhook() {
+            curl -XPOST --data '{"type": "gogs", "config": { "url": "https://${webhook_route}", "content_type": "json"}, "events": ["push"], "active": true}' --header "Content-Type: application/json" --user \${gitea_user}:\${gitea_pwd} --write-out %{http_code} --silent http://\${gitea_service}:3000/api/v1/repos/\${gitea_user}/\${repo}/hooks
+          }
+          repo=\${1}
+          write_webhook_status() {
+            echo "Waiting for Webhook for \$repo, status: \$configure_webhook"
+          }
+          check_interval=\${2:-10}
+          webhooks_status="\$(configure_webhook)"
+          write_webhook_status
+          while [[ "\$webhooks_status" != *201 ]]; do
+            echo \$webhooks_status
+            sleep \$check_interval
             webhooks_status="\$(configure_webhook)"
             write_webhook_status
-            while [[ "\$webhooks_status" != *201 ]]; do
-              echo \$webhooks_status
-              sleep \$check_interval
-              webhooks_status="\$(configure_webhook)"
-              write_webhook_status
-            done
-            EOF
-
-            for REPO in ${REPOS[@]}; do
-              timeout 300 bash -c "$CONFIGURE_WEBHOOK" $0 $REPO $CHECK_INTERVAL
-            done
+          done
+          EOF
+          for REPO in ${REPOS[@]}; do
+            timeout 300 bash -c "$CONFIGURE_WEBHOOK" $0 $REPO $CHECK_INTERVAL
+          done
       restartPolicy: OnFailure
