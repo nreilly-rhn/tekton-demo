@@ -122,7 +122,7 @@ spec:
           webhook_route=$(oc get route webhook -ojsonpath='{.spec.host}')
           gitea_service=$(oc get svc gitea -ojsonpath='{.spec.clusterIP}')
           configure_webhook() {
-            curl -XPOST --data '{"type": "gogs", "config": { "url": "https://${webhook_route}", "content_type": "json"}, "events": ["push"], "active": true}' --header "Content-Type: application/json" --user \${gitea_user}:\${gitea_pwd} --write-out %{http_code} --silent http://\${gitea_service}:3000/api/v1/repos/\${gitea_user}/\${repo}/hooks
+            curl -XPOST --data '{"type": "gogs", "config": { "url": "https://\${webhook_route}", "content_type": "json"}, "events": ["push"], "active": true}' --header "Content-Type: application/json" --user \${gitea_user}:\${gitea_pwd} --write-out %{http_code} --silent http://\${gitea_service}:3000/api/v1/repos/\${gitea_user}/\${repo}/hooks
           }
           repo=\${1}
           write_webhook_status() {
