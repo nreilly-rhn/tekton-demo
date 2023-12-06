@@ -1,98 +1,170 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "4"
-  name: cli-test
-  namespace: cicd
-spec:
-  serviceAccount: gitea-init
-  serviceAccountName: gitea-init
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containers:
-    - name: httpd
-      resources:
-        limits:
-          cpu: 200m
-          memory: 512Mi
-      image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
-      command:
-        - /bin/sh
-        - '-ec'
-        - 'while :; do echo ''.''; sleep 5 ; done'
-      securityContext:
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-
-#apiVersion: batch/v1
-#kind: Job
+#apiVersion: v1
+#kind: Pod
 #metadata:
 #  annotations:
 #    argocd.argoproj.io/sync-wave: "4"
-#  name: init-gogs-job
+#  name: cli-test
 #  namespace: cicd
 #spec:
-#  template:
-#    spec:
-#      serviceAccount: gitea-init
-#      serviceAccountName: gitea-init
-#      containers:
-#      - name: init-gogs
-#        image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-#        command:
-#          - python3
-#          - -c
-#          - |
-#            import os
-#            import requests
-#
-#            result = ""
-#            def wait_for_gitea():
-#              os.popen('oc wait gitea -n cicd gitea --for=jsonpath="{.status.userSetupComplete}"=true --timeout=-1s')
-#
-#            def petclinic_webhook():
-#              global result
-#              gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
-#              gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
-#              webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
-#              gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
-#              data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
-#              if result != '200' or result != 201:
-#                try:
-#                  headers = {'Content-Type': 'application/json'}
-#                  resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic/hooks",
-#                            headers = headers,
-#                                      auth = (gitea_user, gitea_pwd),
-#                                      data = data_webhook)
-#                  result = resp.status_code
-#                finally:
-#                  print("Configured webhook: " + webhookURL)
-#            config_result = ""
-#
-#            def petclinic_config_webhook():
-#              global config_result
-#              gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
-#              gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
-#              webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
-#              gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
-#              data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
-#              if config_result != '200' or config_result != 201:
-#                try:
-#                  headers = {'Content-Type': 'application/json'}
-#                  resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic-config/hooks",
-#                            headers = headers,
-#                                      auth = (gitea_user, gitea_pwd),
-#                                      data = data_webhook)
-#                  config_result = resp.status_code
-#                finally:
-#                  print("Configured webhook: " + webhookURL)
-#
-#            wait_for_gitea()
-#            petclinic_webhook()
-#            petclinic_config_webhook()
-#      restartPolicy: OnFailure
+#  serviceAccount: gitea-init
+#  serviceAccountName: gitea-init
+#  securityContext:
+#    runAsNonRoot: true
+#    seccompProfile:
+#      type: RuntimeDefault
+#  containers:
+#    - name: httpd
+#      resources:
+#        limits:
+#          cpu: 200m
+#          memory: 512Mi
+#      image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+#      command:
+#        - /bin/sh
+#        - '-ec'
+#        - 'while :; do echo ''.''; sleep 5 ; done'
+#      securityContext:
+#        allowPrivilegeEscalation: false
+#        capabilities:
+#          drop:
+#            - ALL
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  name: init-gogs-job
+  namespace: cicd
+spec:
+  template:
+    spec:
+      serviceAccount: gitea-init
+      serviceAccountName: gitea-init
+      containers:
+      - name: init-gogs
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        command:
+          - /bin/sh
+          - -ce
+          - |
+            OPERATORS=("gitea-operator.gitea-operator")
+            INSTANCES=("gitea")
+            REPOS=("spring-petclinic" "spring-petclinic-config")
+            CHECK_INTERVAL=1
+
+            read -r -d '' OP_CMD <<EOF
+            check_csv() {
+              oc get operators.operators.coreos.com \$operator -o jsonpath='{.status.components.refs[?(@.kind=="ClusterServiceVersion")].conditions[0].reason}'
+            }
+
+            check_instance() {
+              oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
+              echo \$?
+            }
+
+            write_operator_status() {
+              echo "Waiting for operator \$operator, status: \$csv_status"
+            }
+
+            write_instance_status() {
+              echo "Waiting for operator \$instance, status: \$instance_status"
+            }
+
+            operator=\${1}
+
+            if [[ -z \$operator ]]; then
+              echo "No operator name supplied, aborting"
+              exit 2
+            fi
+
+            instance=\${2}
+
+            if [[ -z \$instance ]]; then
+              echo "No instance name supplied, aborting"
+              exit 2
+            fi
+
+            check_interval=\${3:-10}
+
+            csv_status="\$(check_csv)"
+            write_operator_status
+            while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
+              sleep \$check_interval
+              csv_status="\$(check_csv)"
+              write_operator_status
+            done
+
+            EOF
+
+            for OPERATOR in ${OPERATORS[@]}; do
+              timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $INSTANCE $CHECK_INTERVAL
+            done
+
+            read -r -d '' IN_CMD <<EOF
+            check_instance() {
+              oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
+              echo \$?
+            }
+
+            write_instance_status() {
+              echo "Waiting for operator \$instance, status: \$instance_status"
+            }
+
+            instance=\${1}
+
+            if [[ -z \$instance ]]; then
+              echo "No instance name supplied, aborting"
+              exit 2
+            fi
+
+            check_interval=\${2:-10}
+
+            instance_status="\$(check_instance)"
+            write_instance_status
+            while [[ "\$instance_status" != 0 ]]; do
+              sleep \$check_interval
+              instance_status="\$(check_instance)"
+              write_instance_status
+            done
+
+            EOF
+
+            for INSTANCE in ${INSTANCES[@]}; do
+              timeout 300 bash -c "$IN_CMD" $0 $INSTANCE $CHECK_INTERVAL
+            done
+
+            REPOS=("spring-petclinic" "spring-petclinic-config")
+
+            read -r -d '' CONFIGURE_WEBHOOK <<EOF
+            gitea_user=$(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}')
+            gitea_pwd=$(oc get gitea gitea -ojsonpath='{.status.userPassword}')
+            webhook_route=$(oc get route webhook -ojsonpath='{.spec.host}')
+            gitea_service=$(oc get svc gitea -ojsonpath='{.spec.clusterIP}')
+
+            configure_webhook() {
+              curl -XPOST --data '{"type": "gogs", "config": { "url": "https://${webhook_route}", "content_type": "json"}, "events": ["push"], "active": true}' --header "Content-Type: application/json" --user \${gitea_user}:\${gitea_pwd} --write-out %{http_code} --silent http://\${gitea_service}:3000/api/v1/repos/\${gitea_user}/\${repo}/hooks
+            }
+
+            repo=\${1}
+
+            write_webhook_status() {
+              echo "Waiting for Webhook for \$repo, status: \$configure_webhook"
+            }
+
+            check_interval=\${2:-10}
+
+            webhooks_status="\$(configure_webhook)"
+            write_webhook_status
+            while [[ "\$webhooks_status" != *201 ]]; do
+              echo \$webhooks_status
+              sleep \$check_interval
+              webhooks_status="\$(configure_webhook)"
+              write_webhook_status
+            done
+            EOF
+
+            for REPO in ${REPOS[@]}; do
+              timeout 300 bash -c "$CONFIGURE_WEBHOOK" $0 $REPO $CHECK_INTERVAL
+            done
+      restartPolicy: OnFailure
