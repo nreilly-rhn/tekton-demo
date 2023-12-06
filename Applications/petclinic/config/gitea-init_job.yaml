@@ -1,67 +1,96 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Pod
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
-  name: init-gogs-job
+  name: cli-test
   namespace: cicd
 spec:
-  template:
-    spec:
-      serviceAccount: gitea-init
-      serviceAccountName: gitea-init
-      containers:
-      - name: init-gogs
-        image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-        command:
-          - python3
-          - -c
-          - |
-            import os
-            import requests
+  serviceAccount: gitea-init
+  serviceAccountName: gitea-init
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: httpd
+      resources:
+        limits:
+          cpu: 200m
+          memory: 512Mi
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+      command:
+        - /bin/sh
+        - '-ec'
+        - 'while :; do echo ''.''; sleep 5 ; done'
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
 
-            result = ""
-            def wait_for_gitea():
-              os.popen('oc wait gitea -n cicd gitea --for=jsonpath="{.status.userSetupComplete}"=true --timeout=-1s')
-
-            def petclinic_webhook():
-              global result
-              gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
-              gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
-              webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
-              gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
-              data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
-              if result != '200' or result != 201:
-                try:
-                  headers = {'Content-Type': 'application/json'}
-                  resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic/hooks",
-                            headers = headers,
-                                      auth = (gitea_user, gitea_pwd),
-                                      data = data_webhook)
-                  result = resp.status_code
-                finally:
-                  print("Configured webhook: " + webhookURL)
-            config_result = ""
-
-            def petclinic_config_webhook():
-              global config_result
-              gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
-              gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
-              webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
-              gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
-              data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
-              if config_result != '200' or config_result != 201:
-                try:
-                  headers = {'Content-Type': 'application/json'}
-                  resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic-config/hooks",
-                            headers = headers,
-                                      auth = (gitea_user, gitea_pwd),
-                                      data = data_webhook)
-                  config_result = resp.status_code
-                finally:
-                  print("Configured webhook: " + webhookURL)
-
-            wait_for_gitea()
-            petclinic_webhook()
-            petclinic_config_webhook()
-      restartPolicy: OnFailure
+#apiVersion: batch/v1
+#kind: Job
+#metadata:
+#  annotations:
+#    argocd.argoproj.io/sync-wave: "3"
+#  name: init-gogs-job
+#  namespace: cicd
+#spec:
+#  template:
+#    spec:
+#      serviceAccount: gitea-init
+#      serviceAccountName: gitea-init
+#      containers:
+#      - name: init-gogs
+#        image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+#        command:
+#          - python3
+#          - -c
+#          - |
+#            import os
+#            import requests
+#
+#            result = ""
+#            def wait_for_gitea():
+#              os.popen('oc wait gitea -n cicd gitea --for=jsonpath="{.status.userSetupComplete}"=true --timeout=-1s')
+#
+#            def petclinic_webhook():
+#              global result
+#              gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
+#              gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
+#              webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
+#              gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+#              data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
+#              if result != '200' or result != 201:
+#                try:
+#                  headers = {'Content-Type': 'application/json'}
+#                  resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic/hooks",
+#                            headers = headers,
+#                                      auth = (gitea_user, gitea_pwd),
+#                                      data = data_webhook)
+#                  result = resp.status_code
+#                finally:
+#                  print("Configured webhook: " + webhookURL)
+#            config_result = ""
+#
+#            def petclinic_config_webhook():
+#              global config_result
+#              gitea_user = os.popen('oc get gitea gitea -ojsonpath="{.spec.giteaGenerateUserFormat}"').read()
+#              gitea_pwd = os.popen('oc get gitea gitea -ojsonpath="{.status.userPassword}"').read()
+#              webhookURL = "https://" + os.popen('oc get route webhook -o template --template="{{.spec.host}}"').read()
+#              gitea_url = "http://" + os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+#              data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
+#              if config_result != '200' or config_result != 201:
+#                try:
+#                  headers = {'Content-Type': 'application/json'}
+#                  resp = requests.post(url = gitea_url + "/api/v1/repos/" + gitea_user + "/spring-petclinic-config/hooks",
+#                            headers = headers,
+#                                      auth = (gitea_user, gitea_pwd),
+#                                      data = data_webhook)
+#                  config_result = resp.status_code
+#                finally:
+#                  print("Configured webhook: " + webhookURL)
+#
+#            wait_for_gitea()
+#            petclinic_webhook()
+#            petclinic_config_webhook()
+#      restartPolicy: OnFailure
