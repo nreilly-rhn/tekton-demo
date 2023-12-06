@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
   name: cli-test
   namespace: cicd
 spec:
@@ -31,7 +33,7 @@ spec:
 #kind: Job
 #metadata:
 #  annotations:
-#    argocd.argoproj.io/sync-wave: "3"
+#    argocd.argoproj.io/sync-wave: "4"
 #  name: init-gogs-job
 #  namespace: cicd
 #spec:
