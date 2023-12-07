@@ -81,11 +81,15 @@ spec:
           check_interval=\${3:-10}
           csv_status="\$(check_csv)"
           write_operator_status
-          while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
-            sleep \$check_interval
-            csv_status="\$(check_csv)"
-            write_operator_status
-          done
+          if [[ "\$csv_status" = "" ]]; do
+            echo "Waiting for Operator to install"
+          elif 
+            while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
+              sleep \$check_interval
+              csv_status="\$(check_csv)"
+              write_operator_status
+            done
+          fi
           EOF
           for OPERATOR in ${OPERATORS[@]}; do
             timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $CHECK_INTERVAL
