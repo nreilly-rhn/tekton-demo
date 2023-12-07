@@ -81,9 +81,9 @@ spec:
           check_interval=\${3:-10}
           csv_status="\$(check_csv)"
           write_operator_status
-          if [[ "\$csv_status" = "" ]]; do
+          if [[ -z "\$csv_status" ]]; then
             echo "Waiting for Operator to install"
-          elif 
+          else
             while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
               sleep \$check_interval
               csv_status="\$(check_csv)"
