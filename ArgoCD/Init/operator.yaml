@@ -30,10 +30,10 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccount: openshift-gitops-argocd-server
-      serviceAccountName: openshift-gitops-argocd-server
+      serviceAccount: openshift-gitops-argocd-application-controller
+      serviceAccountName: openshift-gitops-argocd-application-controller
       containers:
-      - name: init-gogs
+      - name: init-gitops
         image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
         command:
         - /bin/bash
@@ -48,5 +48,5 @@ spec:
           done
           oc patch cm -n openshift-gitops argocd-cm -p '{"data":{"resource.customizations":"PersistentVolumeClaim:\n  health.lua: |\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.phase ~= nil then\n        if obj.status.phase == \"Pending\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n        if obj.status.phase == \"Bound\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for PersistentVolumeClaim\"\n    return hs\n"}}'
           EOF
-          timeout 300 bash -c "$CMD" $0
+          timeout 180 bash -c "$CMD" $0
       restartPolicy: OnFailure
