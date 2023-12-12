@@ -12,7 +12,6 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain 
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
