@@ -43,10 +43,22 @@ spec:
           set -uo pipefail
 
           read -r -d '' CMD <<EOF
-          until oc wait argocds.argoproj.io -n openshift-gitops openshift-gitops --for jsonpath='{.status.phase}'=Available; do 
-            sleep 5
-          done
-          oc patch argocds.argoproj.io -n openshift-gitops openshift-gitops --type=merge -p '{"spec":{"resourceHealthChecks":[{"group":"v1","kind":"PersistentVolumeClaim","check":"\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.phase ~= nil then\n        if obj.status.phase == \"Pending\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n        if obj.status.phase == \"Bound\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for PersistentVolumeClaim\"\n    return hs\n"}]}}'
+          wait_for_argo_instance(){
+            until oc wait argocds.argoproj.io -n openshift-gitops openshift-gitops --for jsonpath='{.status.phase}'=Available; do 
+              sleep 5
+            done
+          }
+          patch_argo() {
+            oc patch argocds.argoproj.io -n openshift-gitops openshift-gitops --type=merge -p '{"spec":{"resourceHealthChecks":[{"group":"v1","kind":"PersistentVolumeClaim","check":"\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.phase ~= nil then\n        if obj.status.phase == \"Pending\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n        if obj.status.phase == \"Bound\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for PersistentVolumeClaim\"\n    return hs\n"}]}}'
+          }
+          restart_argo_instance() {
+            oc delete pod -l app.kubernetes.io/name=openshift-gitops-server
+          }
+          wait_for_argo_instance
+          patch_argo
+          restart_argo_instance
+          wait_for_argo_instance
           EOF
+          
           timeout 180 bash -c "$CMD" $0
       restartPolicy: OnFailure
