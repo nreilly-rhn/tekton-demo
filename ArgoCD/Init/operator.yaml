@@ -46,7 +46,7 @@ spec:
           until oc wait argocds.argoproj.io -n openshift-gitops openshift-gitops --for jsonpath='{.status.phase}'=Available; do 
             sleep 5
           done
-          oc patch argocds.argoproj.io -n openshift-gitops argocd --type=merge -p '{"spec":{"resourceHealthChecks":[{"group":"v1","kind":"PersistentVolumeClaim","check":"\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.phase ~= nil then\n        if obj.status.phase == \"Pending\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n        if obj.status.phase == \"Bound\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for PersistentVolumeClaim\"\n    return hs\n"}]}}'
+          oc patch argocds.argoproj.io -n openshift-gitops openshift-gitops --type=merge -p '{"spec":{"resourceHealthChecks":[{"group":"v1","kind":"PersistentVolumeClaim","check":"\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.phase ~= nil then\n        if obj.status.phase == \"Pending\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n        if obj.status.phase == \"Bound\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for PersistentVolumeClaim\"\n    return hs\n"}]}}'
           EOF
           timeout 180 bash -c "$CMD" $0
       restartPolicy: OnFailure
