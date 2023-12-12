@@ -4,4 +4,4 @@ metadata:
   name: kustomization-file
 resources:
   - ./namespace.yaml
-  - ./subscription.yaml
+  - ./operator.yaml
