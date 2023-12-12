@@ -21,3 +21,29 @@ spec:
   name: openshift-gitops-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-gitops-job
+  namespace: openshift-gitops
+spec:
+  template:
+    spec:
+      serviceAccount: openshift-gitops-argocd-server
+      serviceAccountName: openshift-gitops-argocd-server
+      containers:
+      - name: init-gogs
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        command:
+        - /bin/bash
+        - '-c'
+        - |
+          #!/bin/bash
+          set -uo pipefail
+
+          until oc wait argocds.argoproj.io -n openshift-gitops openshift-gitops --for jsonpath='{.status.phase}'=Available; do 
+            sleep 5
+          done
+          oc patch cm -n openshift-gitops argocd-cm -p '{"data":{"resource.customizations":"PersistentVolumeClaim:\n  health.lua: |\n    hs = {}\n    if obj.status ~= nil then\n      if obj.status.phase ~= nil then\n        if obj.status.phase == \"Pending\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n        if obj.status.phase == \"Bound\" then\n          hs.status = \"Healthy\"\n          hs.message = obj.status.phase\n          return hs\n        end\n      end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting for PersistentVolumeClaim\"\n    return hs\n"}}'
+      restartPolicy: OnFailure
