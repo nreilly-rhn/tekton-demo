@@ -110,8 +110,8 @@ spec:
     taskRef:
       name: maven
     runAfter:
-      - code-analysis
-      - dependency-report
+#      - code-analysis
+#      - dependency-report
       - unit-tests
     workspaces:
     - name: source
