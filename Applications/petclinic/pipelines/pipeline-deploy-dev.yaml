@@ -109,6 +109,7 @@ spec:
   - name: release-app
     taskRef:
       name: maven
+      kind: ClusterTask
     runAfter:
 #      - code-analysis
 #      - dependency-report
