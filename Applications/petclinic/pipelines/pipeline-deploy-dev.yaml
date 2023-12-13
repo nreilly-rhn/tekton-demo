@@ -200,7 +200,7 @@ spec:
     - name: NEW_IMAGE_DIGEST
       value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: NAMESPACE
-      value: demo-dev
+      value: dev
     - name: KUSTOMIZE_OVERLAY_DIR
       value: environments/dev
     workspaces:
@@ -224,7 +224,7 @@ spec:
       - deploy-dev
     params:
       - name: APP_URL
-        value: "http://spring-petclinic.demo-dev.svc:8080"
+        value: "http://spring-petclinic.dev.svc:8080"
     workspaces:
     - name: simulations
       workspace: workspace
