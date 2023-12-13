@@ -22,12 +22,12 @@ spec:
   giteaUserPasswordLength: 16
   giteaMigrateRepositories: true
   giteaRepositoriesList:
-  - repo: https://github.com/siamaksade/spring-petclinic
+  - repo: https://github.com/nreilly-rhn/spring-petclinic
     name: spring-petclinic
     private: false
-  - repo: https://github.com/siamaksade/spring-petclinic-config
+  - repo: https://github.com/nreilly-rhn/spring-petclinic-config
     name: spring-petclinic-config
     private: false
-  - repo: https://github.com/siamaksade/spring-petclinic-gatling
+  - repo: https://github.com/nreilly-rhn/spring-petclinic-gatling
     name: spring-petclinic-gatling
     private: false

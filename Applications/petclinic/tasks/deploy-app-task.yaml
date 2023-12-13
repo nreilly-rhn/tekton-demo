@@ -42,7 +42,7 @@ spec:
         cat >> $(workspaces.source.path)/$(params.KUSTOMIZE_OVERLAY_DIR)/kustomization.yaml <<- EOF
 
         images:
-        - name: quay.io/siamaksade/spring-petclinic:latest
+        - name: quay.io/nreilly-rhn/spring-petclinic:latest
           newName: $(params.NEW_IMAGE_NAME)
           newTag: $(params.NEW_IMAGE_TAG)
           digest: $(params.NEW_IMAGE_DIGEST)

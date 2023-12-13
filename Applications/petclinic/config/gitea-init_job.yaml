@@ -53,7 +53,7 @@ spec:
           OPERATORS=("gitea-operator.gitea-operator")
           INSTANCES=("gitea")
           REPOS=("spring-petclinic" "spring-petclinic-config")
-          CHECK_INTERVAL=1
+          CHECK_INTERVAL=15
           read -r -d '' OP_CMD <<EOF
           check_csv() {
             oc get operators.operators.coreos.com \$operator -o jsonpath='{.status.components.refs[?(@.kind=="ClusterServiceVersion")].conditions[0].reason}'
