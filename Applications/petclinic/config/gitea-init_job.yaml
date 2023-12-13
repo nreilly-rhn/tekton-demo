@@ -146,6 +146,6 @@ spec:
           echo "$(date +%H:%M:%S) - Webhook configured for $REPO"
           done
           echo "$(date +%H:%M:%S) - Gitea configured"
-          echo "Gitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
-          echo "Gitea credentials: $(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}'):$(oc get gitea gitea -ojsonpath='{.status.userPassword}')"
+          echo "$(date +%H:%M:%S) - Gitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
+          echo "$(date +%H:%M:%S) - Gitea credentials: $(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}'):$(oc get gitea gitea -ojsonpath='{.status.userPassword}')"
       restartPolicy: OnFailure
