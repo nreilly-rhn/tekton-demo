@@ -66,7 +66,7 @@ spec:
             echo "Waiting for operator \$operator, status: \$csv_status"
           }
           write_instance_status() {
-            echo "date +%H:%M:%S - Waiting for operator \$instance, status: \$instance_status"
+            echo "$(date +%H:%M:%S) - Waiting for operator \$instance, status: \$instance_status"
           }
           operator=\${1}
           if [[ -z \$operator ]]; then
@@ -82,7 +82,7 @@ spec:
           csv_status="\$(check_csv)"
           write_operator_status
           if [[ -z "\$csv_status" ]]; then
-            echo "date +%H:%M:%S - Waiting for Operator to install"
+            echo "$(date +%H:%M:%S) - Waiting for Operator to install"
           else
             while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
               sleep \$check_interval
@@ -101,11 +101,11 @@ spec:
             echo \$?
           }
           write_instance_status() {
-            echo "date +%H:%M:%S - Waiting for operator \$instance, status: \$instance_status"
+            echo "$(date +%H:%M:%S) - Waiting for operator \$instance, status: \$instance_status"
           }
           instance=\${1}
           if [[ -z \$instance ]]; then
-            echo "date +%H:%M:%S - No instance name supplied, aborting"
+            echo "$(date +%H:%M:%S) - No instance name supplied, aborting"
             exit 2
           fi
           check_interval=\${2:-15}
@@ -131,7 +131,7 @@ spec:
           }
           repo=\${1}
           write_webhook_status() {
-            echo "date +%H:%M:%S - Waiting for Webhook for \$repo, status: \$configure_webhook"
+            echo "$(date +%H:%M:%S) - Waiting for Webhook for \$repo, status: \$configure_webhook"
           }
           check_interval=\${2:-10}
           webhooks_status="\$(configure_webhook)"
@@ -144,7 +144,7 @@ spec:
           EOF
           for REPO in ${REPOS[@]}; do
             timeout 300 bash -c "$CONFIGURE_WEBHOOK" $0 $REPO $CHECK_INTERVAL
-          echo "date +%H:%M:%S - Webhook configured for $REPO"
+          echo "$(date +%H:%M:%S) - Webhook configured for $REPO"
           done
-          echo "date +%H:%M:%S - Gitea configured\nGitea credentials: ${gitea_user}:${gitea_pwd}\nGitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
+          echo "$(date +%H:%M:%S) - Gitea configured\nGitea credentials: \${gitea_user}:\${gitea_pwd}\nGitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
       restartPolicy: OnFailure
