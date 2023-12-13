@@ -109,11 +109,11 @@ spec:
           fi
           check_interval=\${2:-15}
           instance_status="\$(check_instance)"
-          write_instance_status
+          echo "$(date +%H:%M:%S) - Waiting for operator \$instance, status: \$instance_status"
           while [[ "\$instance_status" != 0 ]]; do
             sleep \$check_interval
             instance_status="\$(check_instance)"
-            write_instance_status
+            echo "$(date +%H:%M:%S) - Waiting for operator \$instance, status: \$instance_status"
           done
           EOF
           for INSTANCE in ${INSTANCES[@]}; do
