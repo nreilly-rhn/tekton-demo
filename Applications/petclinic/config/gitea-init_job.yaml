@@ -97,7 +97,7 @@ spec:
 
           read -r -d '' IN_CMD <<EOF
           check_instance() {
-            oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
+            oc wait gitea -n cicd \$instance --for=jsonpath='{.status.repoMigrationComplete}'=true > /dev/null 2>&1
             echo \$?
           }
           write_instance_status() {
