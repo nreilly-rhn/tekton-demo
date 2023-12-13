@@ -79,33 +79,33 @@ spec:
       workspace: workspace
     - name: maven-settings
       workspace: maven-settings
-  - name: code-analysis
-    taskRef:
-      name: maven
-      kind: ClusterTask
-    runAfter:
-      - source-clone
-    params:
-    - name: GOALS
-      value: [ "install", "sonar:sonar", "-f", "spring-petclinic", "-Dsonar.host.url=http://sonarqube:9000", "-Dsonar.userHome=/tmp/sonar", "-DskipTests=true" ]
-    workspaces:
-    - name: source
-      workspace: workspace
-    - name: maven-settings
-      workspace: maven-settings
-  - name: dependency-report
-    taskRef:
-      name: dependency-report
-    runAfter:
-      - source-clone
-    workspaces:
-    - name: source
-      workspace: workspace
-    - name: maven-settings
-      workspace: maven-settings
-    params:
-    - name: SOURCE_DIR
-      value: spring-petclinic
+#  - name: code-analysis
+#    taskRef:
+#      name: maven
+#      kind: ClusterTask
+#    runAfter:
+#      - source-clone
+#    params:
+#    - name: GOALS
+#      value: [ "install", "sonar:sonar", "-f", "spring-petclinic", "-Dsonar.host.url=http://sonarqube:9000", "-Dsonar.userHome=/tmp/sonar", "-DskipTests=true" ]
+#    workspaces:
+#    - name: source
+#      workspace: workspace
+#    - name: maven-settings
+#      workspace: maven-settings
+#  - name: dependency-report
+#    taskRef:
+#      name: dependency-report
+#    runAfter:
+#      - source-clone
+#    workspaces:
+#    - name: source
+#      workspace: workspace
+#    - name: maven-settings
+#      workspace: maven-settings
+#    params:
+#    - name: SOURCE_DIR
+#      value: spring-petclinic
   - name: release-app
     taskRef:
       name: maven
