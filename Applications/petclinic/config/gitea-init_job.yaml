@@ -80,7 +80,6 @@ spec:
           fi
           check_interval=\${3:-15}
           csv_status="\$(check_csv)"
-          #write_operator_status
           if [[ -z "\$csv_status" ]]; then
             echo "$(date +%H:%M:%S) - Waiting for Operator to install"
           else
@@ -147,6 +146,6 @@ spec:
           echo "$(date +%H:%M:%S) - Webhook configured for $REPO"
           done
           echo "$(date +%H:%M:%S) - Gitea configured"
-          echo "Gitea credentials: $(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}'):$(oc get gitea gitea -ojsonpath='{.status.userPassword}')"
           echo "Gitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
+          echo "Gitea credentials: $(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}'):$(oc get gitea gitea -ojsonpath='{.status.userPassword}')"
       restartPolicy: OnFailure
