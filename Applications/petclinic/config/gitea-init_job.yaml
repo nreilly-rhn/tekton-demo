@@ -66,7 +66,7 @@ spec:
             echo "Waiting for operator \$operator, status: \$csv_status"
           }
           write_instance_status() {
-            echo "Waiting for operator \$instance, status: \$instance_status"
+            echo "date +%H:%M:%S - Waiting for operator \$instance, status: \$instance_status"
           }
           operator=\${1}
           if [[ -z \$operator ]]; then
@@ -78,11 +78,11 @@ spec:
             echo "No instance name supplied, aborting"
             exit 2
           fi
-          check_interval=\${3:-10}
+          check_interval=\${3:-15}
           csv_status="\$(check_csv)"
           write_operator_status
           if [[ -z "\$csv_status" ]]; then
-            echo "Waiting for Operator to install"
+            echo "date +%H:%M:%S - Waiting for Operator to install"
           else
             while [[ "\$csv_status" != "InstallSucceeded" ]]; do 
               sleep \$check_interval
@@ -94,20 +94,21 @@ spec:
           for OPERATOR in ${OPERATORS[@]}; do
             timeout 300 bash -c "$OP_CMD" $0 $OPERATOR $CHECK_INTERVAL
           done
+
           read -r -d '' IN_CMD <<EOF
           check_instance() {
             oc wait gitea -n cicd \$instance --for=jsonpath='{.status.userSetupComplete}'=true > /dev/null 2>&1
             echo \$?
           }
           write_instance_status() {
-            echo "Waiting for operator \$instance, status: \$instance_status"
+            echo "date +%H:%M:%S - Waiting for operator \$instance, status: \$instance_status"
           }
           instance=\${1}
           if [[ -z \$instance ]]; then
-            echo "No instance name supplied, aborting"
+            echo "date +%H:%M:%S - No instance name supplied, aborting"
             exit 2
           fi
-          check_interval=\${2:-10}
+          check_interval=\${2:-15}
           instance_status="\$(check_instance)"
           write_instance_status
           while [[ "\$instance_status" != 0 ]]; do
@@ -119,7 +120,7 @@ spec:
           for INSTANCE in ${INSTANCES[@]}; do
             timeout 300 bash -c "$IN_CMD" $0 $INSTANCE $CHECK_INTERVAL
           done
-          REPOS=("spring-petclinic" "spring-petclinic-config")
+          
           read -r -d '' CONFIGURE_WEBHOOK <<EOF
           gitea_user=$(oc get gitea gitea -ojsonpath='{.spec.giteaGenerateUserFormat}')
           gitea_pwd=$(oc get gitea gitea -ojsonpath='{.status.userPassword}')
@@ -130,7 +131,7 @@ spec:
           }
           repo=\${1}
           write_webhook_status() {
-            echo "Waiting for Webhook for \$repo, status: \$configure_webhook"
+            echo "date +%H:%M:%S - Waiting for Webhook for \$repo, status: \$configure_webhook"
           }
           check_interval=\${2:-10}
           webhooks_status="\$(configure_webhook)"
@@ -138,12 +139,12 @@ spec:
           while [[ "\$webhooks_status" != *201 ]]; do
             echo \$webhooks_status
             sleep \$check_interval
-            webhooks_status="\$(configure_webhook)"
             write_webhook_status
           done
           EOF
           for REPO in ${REPOS[@]}; do
             timeout 300 bash -c "$CONFIGURE_WEBHOOK" $0 $REPO $CHECK_INTERVAL
-          echo "Webhook configured for $REPO"
+          echo "date +%H:%M:%S - Webhook configured for $REPO"
           done
+          echo "date +%H:%M:%S - Gitea configured\nGitea credentials: ${gitea_user}:${gitea_pwd}\nGitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
       restartPolicy: OnFailure
