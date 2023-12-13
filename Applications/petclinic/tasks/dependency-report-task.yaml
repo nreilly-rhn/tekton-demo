@@ -124,7 +124,7 @@ spec:
         - -DskipTests=true
       command:
         - /usr/bin/mvn
-      image: gcr.io/cloud-builders/mvn
+      image: 'registry.access.redhat.com/ubi8/ubi-minimal:latest'
       name: mvn-goals
       resources: {}
       workingDir: $(workspaces.source.path)
