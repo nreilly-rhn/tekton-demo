@@ -63,10 +63,7 @@ spec:
             echo \$?
           }
           write_operator_status() {
-            echo "Waiting for operator \$operator, status: \$csv_status"
-          }
-          write_instance_status() {
-            echo "$(date +%H:%M:%S) - Waiting for operator \$instance, status: \$instance_status"
+            echo "$(date +%H:%M:%S) - Waiting for operator \$operator, status: \$csv_status"
           }
           operator=\${1}
           if [[ -z \$operator ]]; then
@@ -126,7 +123,7 @@ spec:
           webhook_route=$(oc get route webhook -ojsonpath='{.spec.host}')
           gitea_service=$(oc get svc gitea -ojsonpath='{.spec.clusterIP}')
           configure_webhook() {
-            echo '{"type": "gogs", "config": { "url": "https://WEBHOOK_ROUTE", "content_type": "json"}, "events": ["push"], "active": true}' > /tmp/curl_data.json
+            echo '{"type": "gogs", "config": { "url": "https://WEBHOOK_ROUTE", "content_type": "json"}, "events": ["push"], "active": true}' > /tmp/data_\${repo}.json
             sed -i s/WEBHOOK_ROUTE/\${webhook_route}/g /tmp/curl_data.json
             curl -XPOST --data @/tmp/curl_data.json --header "Content-Type: application/json" --user \${gitea_user}:\${gitea_pwd} --write-out %{http_code} --silent http://\${gitea_service}:3000/api/v1/repos/\${gitea_user}/\${repo}/hooks
           }
