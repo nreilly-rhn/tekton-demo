@@ -188,7 +188,7 @@ spec:
     - name: DEPLOYMENT_NAME
       value: spring-petclinic
     - name: CURRENT_IMAGE
-      value: "quay.io/siamaksade/spring-petclinic:latest"
+      value: "image-registry.openshift-image-registry.svc:5000/dev/spring-petclinic:latest"
     - name: NEW_IMAGE_NAME
       value: $(params.APP_IMAGE)
     - name: NEW_IMAGE_TAG
