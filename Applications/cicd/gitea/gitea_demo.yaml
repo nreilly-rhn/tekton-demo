@@ -14,10 +14,11 @@ spec:
   postgresqlVolumeSize: 4Gi
   postgresqlVolumeStorageClass: gp3-csi
   giteaAdminUser: gitea-mgr
-  giteaAdminPassword: ""
-  giteaAdminPasswordLength: 16
+  giteaAdminPassword: gitea123
+  #giteaAdminPasswordLength: 16
   giteaCreateUsers: true
   giteaGenerateUserFormat: demo-user
+  giteaUserPassword: gitea123
   giteaUserNumber: 1
   giteaUserPasswordLength: 16
   giteaMigrateRepositories: true
