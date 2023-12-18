@@ -158,7 +158,7 @@ spec:
             location: ApplicationMenu
             text: Gitea
           EOF
-          echo $CONSOLELINK" > /tmp/consolelink.yaml
+          echo "$CONSOLELINK" > /tmp/consolelink.yaml
           oc apply -f /tmp/consolelink.yaml
           echo "$(date +%H:%M:%S) - Gitea configured"
           echo "$(date +%H:%M:%S) - Gitea URL: https://$(oc get route gitea -n cicd -ojsonpath='{.status.ingress[0].host}')"
