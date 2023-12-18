@@ -1,5 +1,5 @@
 
-# CI/CD Demo with Tekton Pipelines
+## CI/CD Demo with Tekton Pipelines
 
 This repo is CI/CD demo using [Tekton](http://www.tekton.dev) pipelines on OpenShift which builds and deploys the [Spring PetClinic](https://github.com/spring-projects/spring-petclinic) sample Spring Boot application. This demo creates:
 * 3 namespaces for CI/CD, DEV and STAGE projects
@@ -14,6 +14,36 @@ This repo is CI/CD demo using [Tekton](http://www.tekton.dev) pipelines on OpenS
 <p align="center">
   <img width="580" src="docs/images/projects.svg">
 </p>
+
+
+## Deploy
+
+1. Get an OpenShift cluster via https://try.openshift.com
+1. Install OpenShift Pipelines Operator
+1. Download [OpenShift CLI](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/) and [Tekton CLI](https://github.com/tektoncd/cli/releases)
+1. Deploy the demo
+
+    ```
+    $ oc apply -k https://github.com/nreilly-rhn/tekton-demo/ArgoCD/Init
+
+    $ until oc wait argocds.argoproj.io -n openshift-gitops openshift-gitops --for jsonpath='{.status.phase}'=Available; do sleep 10; done
+
+    $ oc apply -k https://github.com/nreilly-rhn/tekton-demo/ArgoCD/config/apps
+
+    ```
+
+1. Start the deploy pipeline by making a change in the `spring-petclinic` Git repository on Gitea.
+
+1. Check pipeline run logs
+
+    ```
+    $ tkn pipeline logs petclinic-deploy-dev -n NAMESPACE
+    ```
+
+![Pipelines in Dev Console](docs/images/pipelines.png)
+
+![Pipeline Diagram](docs/images/pipeline-viz.png)
+
 
 ## Deploy DEV Pipeline
 
@@ -38,33 +68,3 @@ The STAGE deploy pipeline requires the image tag that you want to deploy into ST
 1. Tests are executed against the staging environment
 
 ![Pipeline Diagram](docs/images/pipeline-diagram-stage.svg)
-
-
-# Deploy
-
-1. Get an OpenShift cluster via https://try.openshift.com
-1. Install OpenShift Pipelines Operator
-1. Download [OpenShift CLI](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/) and [Tekton CLI](https://github.com/tektoncd/cli/releases)
-1. Deploy the demo
-
-    ```
-    $ oc apply -k https://github.com/nreilly-rhn/tekton-demo/ArgoCD/Init
-
-    $ oc wait argocds.argoproj.io -n openshift-gitops openshift-gitops --timeout=-1s --for jsonpath='{.status.phase}'=Available
-
-    $ oc apply -k https://github.com/nreilly-rhn/tekton-demo/ArgoCD/config/apps
-
-    ```
-
-1. Start the deploy pipeline by making a change in the `spring-petclinic` Git repository on Gitea.
-
-1. Check pipeline run logs
-
-    ```
-    $ tkn pipeline logs petclinic-deploy-dev -n NAMESPACE
-    ```
-
-![Pipelines in Dev Console](docs/images/pipelines.png)
-
-![Pipeline Diagram](docs/images/pipeline-viz.png)
-
