@@ -68,3 +68,20 @@ The STAGE deploy pipeline requires the image tag that you want to deploy into ST
 1. Tests are executed against the staging environment
 
 ![Pipeline Diagram](docs/images/pipeline-diagram-stage.svg)
+
+
+## Demonstrate appication fix
+
+### Fix image
+1. Open the Gitea repository for the spring-petclinic application
+1. Edit the Welcome and error pages to fix the image orientation, edit "upets.png" to pets.png
+> spring-petclinic/src/main/resources/templates/welcome.html
+>
+> spring-petclinic/src/main/resources/templates/error.html
+1. wait for the pipeline to complete and check that the image is now oriented correctly
+
+### Fic Logo
+1. Edit the CSS template 
+> src/main/resources/templates/fragments/layout.html
+1. Update line 83, change "spring-logo.svg" to "new-spring.png"
+1. wait for the pipeline to complete and check that the rightful image is now displayed
