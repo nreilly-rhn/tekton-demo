@@ -7,6 +7,12 @@ metadata:
   namespace: cicd
 rules:
   - verbs:
+      - '*'
+    apiGroups:
+      - console.openshift.io
+    resources:
+      - consolelinks
+  - verbs:
       - get
       - list
       - watch
