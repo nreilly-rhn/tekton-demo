@@ -74,10 +74,18 @@ The STAGE deploy pipeline requires the image tag that you want to deploy into ST
 
 ### Fix image
 1. Open the Gitea repository for the spring-petclinic application
-1. Edit the Welcome and error pages to fix the image orientation, edit "upets.png" to pets.png
+> There is a consoleLink created by the demo:
+
+![consoleLink](docs/images/consoleLink.png)
+
+1. Edit the welcome.html and error.html pages to fix the image orientation, edit "upets.png" to pets.png
+
+![consoleLink](docs/images/gitea-edit.png)
+
 > spring-petclinic/src/main/resources/templates/welcome.html
 >
 > spring-petclinic/src/main/resources/templates/error.html
+
 1. wait for the pipeline to complete and check that the image is now oriented correctly
 
 ### Fic Logo
