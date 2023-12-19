@@ -37,7 +37,7 @@ This repo is CI/CD demo using [Tekton](http://www.tekton.dev) pipelines on OpenS
 1. Check pipeline run logs
 
     ```
-    $ tkn pipeline logs petclinic-deploy-dev -n NAMESPACE
+    $ tkn pipeline logs petclinic-deploy-dev -n cicd
     ```
 
 ![Pipelines in Dev Console](docs/images/pipelines.png)
