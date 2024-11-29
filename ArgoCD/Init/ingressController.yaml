@@ -1,0 +1,25 @@
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  finalizers:
+  - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
+  name: custom
+  namespace: openshift-ingress-operator
+spec:
+  clientTLS:
+    clientCA:
+      name: ""
+    clientCertificatePolicy: ""
+  domain: "r53.naramajac.com"
+  endpointPublishingStrategy:
+    type: Private
+  httpCompression: {}
+  httpEmptyRequestsPolicy: Respond
+  httpErrorCodePages:
+    name: ""
+  namespaceSelector:
+    matchLabels:
+      ingress: custom
+  tuningOptions:
+    reloadInterval: 0s
+  unsupportedConfigOverrides: null
